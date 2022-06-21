@@ -7,6 +7,11 @@
         <entry key="..\:/Code/AndroidStudio/Freelance/MyQuotes/app/src/main/res/layout/activity_cc_response.xml" value="0.10520833333333333" />
         <entry key="..\:/Code/AndroidStudio/Freelance/MyQuotes/app/src/main/res/layout/activity_init_secure_conn.xml" value="0.10520833333333333" />
         <entry key="..\:/Code/AndroidStudio/Freelance/MyQuotes/app/src/main/res/layout/activity_main.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.42436594202898553" />
+        <entry key="app/src/main/res/layout/activity_payfort.xml" value="0.2911458333333333" />
+        <entry key="app/src/main/res/layout/activity_saved_quotes.xml" value="0.5052083333333334" />
+        <entry key="app/src/main/res/layout/rv_item.xml" value="2.0" />
+        <entry key="app/src/main/res/layout/rv_saved_quote.xml" value="0.5182291666666666" />
       </map>
     </option>
   </component>

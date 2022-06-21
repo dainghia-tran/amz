@@ -12,29 +12,36 @@ import com.payfort.fort.android.sdk.base.callbacks.FortCallback;
 import com.payfort.sdk.android.dependancies.base.FortInterfaces;
 import com.payfort.sdk.android.dependancies.models.FortRequest;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity {
+public class PayfortActivity extends AppCompatActivity {
     private FortCallBackManager fortCallback = null;
-    String deviceId = "", sdkToken = "";
+    String deviceId = "";
+    String sdkToken = "";
+    String merchant_identifier = "";
+    String access_code = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_payfort);
 
         fortCallback = FortCallback.Factory.create();
         // Generating deviceId
-        deviceId = FortSdk.getDeviceId(MainActivity.this);
+        deviceId = FortSdk.getDeviceId(PayfortActivity.this);
         Log.d("DeviceId ", deviceId);
         // prepare payment request
         FortRequest fortrequest = new FortRequest();
-        fortrequest.setRequestMap(collectRequestMap("PASS_THE_GENERATED_SDK_TOKEN_HERE"));
+        fortrequest.setRequestMap(collectRequestMap(sdkToken));
         fortrequest.setShowResponsePage(true);
 
         callSdk(fortrequest);
     }
+
 
     private Map<String, Object> collectRequestMap(String sdkToken) {
         Map<String, Object> requestMap = new HashMap<>();
@@ -59,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void callSdk(FortRequest fortrequest) {
         try {
-            FortSdk.getInstance().registerCallback(MainActivity.this, fortrequest, FortSdk.ENVIRONMENT.TEST, 5, fortCallback, new FortInterfaces.OnTnxProcessed() {
+            FortSdk.getInstance().registerCallback(PayfortActivity.this, fortrequest, FortSdk.ENVIRONMENT.TEST, 5, fortCallback, new FortInterfaces.OnTnxProcessed() {
                 @Override
                 public void onCancel(Map<String, Object> requestParamsMap,
                                      Map<String, Object> responseMap) {
@@ -87,5 +94,26 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         fortCallback.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private String getSignature() {
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            String text = "REQUESTPHRASEaccess_code="+ access_code + "device_id=" + FortSdk.getDeviceId(PayfortActivity.this)
+                    + "language=enmerchant_identifier="+merchant_identifier+"service_command=SDK_TOKENREQUESTPHRASE";
+            md.update(text.getBytes("UTF-8")); // Change this to "UTF-16" if needed
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        byte[] digest = md.digest();
+        String signature = String.format("%064x", new java.math.BigInteger(1, digest));
+        return signature;
+    }
+
+    public static String random() {
+        SecureRandom secureRandom = new SecureRandom();
+        return new BigInteger(40, secureRandom).toString(32);
     }
 }

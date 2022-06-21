@@ -23,6 +23,12 @@
         android:theme="@style/Theme.MyQuotes"
         tools:targetApi="31">
         <activity
+            android:name=".SavedQuotesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".PayfortActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -31,7 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.payfort.fort.android.sdk.activities.InitSecureConnectionActivity"
             android:configChanges="locale|orientation|screenSize"
